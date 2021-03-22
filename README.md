@@ -7,7 +7,7 @@ A Julia port of the REPULSION algorithm to generate a uniform grid on a unit hyp
 - Quaternions
 
 ## Description
-This function is a Julia port, by Murari Soundararajan (murari@magnet.fsu.edu) of the REPULSION algorithm originally published by [Bak and Nielsen](https://dx.doi.org/10.1006/jmre.1996.1087) as implemented in Spinach for MATLAB by Ilya Kuprov (https://www.spindynamics.org). Static Arrays are used to improve performance.
+This function is a Julia port, by Murari Soundararajan (murari@magnet.fsu.edu), of the REPULSION algorithm originally published by [Bak and Nielsen](https://dx.doi.org/10.1006/jmre.1996.1087) as implemented in Spinach for MATLAB by Ilya Kuprov (https://www.spindynamics.org). Static Arrays are used to improve performance.
 
     repulsion(npoints, ndims, niter, tol = 1e-10)
     
