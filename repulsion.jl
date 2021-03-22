@@ -56,9 +56,9 @@ function repulsion(npoints, dims, niter, convergence_tol = 1e-10)
         R_n = normalize.(R_n - dims*F/npoints)
         max_diff = maximum(norm.(R-R_n))
         R = R_n
-	    if mod(i, 1000) == 0
-	        @info "Maximum difference " max_diff "At iteration " i
-	    end
+	if mod(i, 1000) == 0
+	    @debug "Maximum difference " max_diff "At iteration " i
+	end
         if max_diff <= convergence_tol
             @info "Converged at iteration " i
             break
