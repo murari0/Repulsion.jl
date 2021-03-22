@@ -11,7 +11,7 @@ This function is a Julia port, by Murari Soundararajan (murari@magnet.fsu.edu) o
 
     repulsion(npoints, ndims, niter, tol = 1e-10)
     
-generates `npoints` number of `ndims` dimensional points and iteratively moves them on the unit hypersphere according to mutual repulsion forces. The algorithm terminates either when `niter` iterations have passed, or when the maximum point displacement between two successive iterations is less than the required tolerance `tol`. The points are returned as a vector of angles that parametrise the points: in two dimensions, a single angle `[0, β, 0]` is returned; in three dimensions, two angles `[0, β, γ]` are returned; and in four dimensions, three Euler angles `[α, β, γ]` are returned.
+generates `npoints` number of `ndims` dimensional points and iteratively moves them on the unit hypersphere according to mutual repulsion forces. The algorithm terminates either when `niter` iterations have passed, or when the maximum point displacement between two successive iterations is less than the required tolerance `tol`. The points are returned as a vector of angles that parametrise the points: in two dimensions, a single angle `[0, β, 0]` is returned; in three dimensions, two angles `[0, β, γ]` are returned; and in four dimensions, the points are considered to be quaternions and three ZYZ Euler angles `[α, β, γ]` are returned.
 
 If you use this code, please cite the following papers
 - H. J. Hogben, M. Krzystyniak, G. T. P. Charnock, P. J. Hore and I. Kuprov, *Spinach – A software library for simulation of spin dynamics in large spin systems*, J. Magn. Reson., 208 (**2011**) 179–194.
