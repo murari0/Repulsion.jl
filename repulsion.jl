@@ -43,13 +43,13 @@ function dist_vector(a::SVector{N,T}, b::SVector{N,T}) where N where T
     end
 end
 
-function repulsion(npoints, dims, niter, convergence_tol = 1e-10)
-    R_raw = rand(dims, npoints) .- 0.5
-    R = [SVector{dims, Float64}(ntuple(i -> R_raw[n+i], Val(dims))) for n in 0:dims:(dims*npoints-1)]
+function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where {T <: AbstractFloat}
+    R_raw = rand(T, dims, npoints) .- one(T)/2
+    R = [SVector{dims, T}(ntuple(i -> R_raw[n+i], Val(dims))) for n in 0:dims:(dims*npoints-1)]
     R_n = copy(R) # pre-allocate
-    F = zeros(SVector{dims, Float64},npoints)
+    F = zeros(SVector{dims, T},npoints)
     for i in 1:niter
-        F .= 0.0 .* F
+        F .= zero(T) .* F
         for k in eachindex(R)
             F .-= dist_vector.(R,[R[k]])
         end
