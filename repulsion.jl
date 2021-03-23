@@ -3,7 +3,6 @@ using StaticArrays
 using Quaternions
 
 
-
 function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where {T <: AbstractFloat}
     R_raw = rand(T, dims, npoints) .- one(T)/2
     R = [SVector{dims, T}(ntuple(i -> R_raw[n+i], Val(dims))) for n in 0:dims:(dims*npoints-1)]
@@ -38,6 +37,7 @@ function dist_vector(a::SVector{N,T}, b::SVector{N,T}) where N where T
         dd*dot(a, b)
     end
 end
+
 
 function toangles(p::SVector{N,T}) where N where T
     angles = zeros(3)
