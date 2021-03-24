@@ -4,14 +4,14 @@ using Quaternions
 
 
 function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where {T <: AbstractFloat}
-    R_raw = rand(T, dims, npoints) .- one(T)/2
+    R_raw = rand(T, dims, npoints) .- one(T)/2 # generating the first set of random points 
     R = [SVector{dims, T}(ntuple(i -> R_raw[n+i], Val(dims))) for n in 0:dims:(dims*npoints-1)]
     R_n = copy(R) # pre-allocate
-    F = zeros(SVector{dims, T},npoints)
-    for i in 1:niter
+    F = zeros(SVector{dims, T},npoints) # pre-allocate "forces"
+    for i in 1:niter # starting the conjugate gradient optimization
         F .= zero(T) .* F
         for k in eachindex(R)
-            F .-= dist_vector.(R,[R[k]])
+            F .-= dist_vector.(R,[R[k]]) # compute the distance in between points
         end
         R_n = normalize.(R_n - dims*F/npoints)
         max_diff = maximum(norm.(R-R_n))
