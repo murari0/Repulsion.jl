@@ -17,14 +17,14 @@ function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where
         max_diff = maximum(norm.(R-R_n))
         R = R_n
 	if mod(i, 1000) == 0
-	    @debug "Maximum difference " max_diff "At iteration " i
+	    @debug "Maximum difference " max_diff "At iteration " i # returns the convergence value every 1000 steps
 	end
         if max_diff <= convergence_tol
-            @info "Converged at iteration " i
+            @info "Converged at iteration " i # stops and return number of steps when converged
             break
         end
     end
-    toangles.(R)
+    toangles.(R) # computing the angles
 end
 
 
