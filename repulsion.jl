@@ -4,11 +4,14 @@ using StaticArrays
 """
     repulsion(npoints, dims, niter = 1e7, convergence_tol = 1e-10)
 
-Generates `npoints` random points in `dims` dimensions and distributes them uniformly on the surface of the unit sphere
+Generates a uniform grid of `npoints` points in `dims` dimensions, distributed uniformly on the surface of the unit sphere
 using the REPULSION algorithm
 
 The function iterates, up to a maximum of `niter` times, until the algorithm converges. The convergence criterion 
-`convergence_tol` is interpreted as the target for the maximum displacement between points in two successive iterations.
+`convergence_tol` is interpreted as the target for the maximum displacement between points in two successive iterations. The points
+inherit their floating point precision from `convergence_tol`.
+The points are returned as a vector of vectors of length `npoints`, with each element containing the angles `[α, β, γ]` and the
+weight corresponding to each point (currently uniform weights are assigned)
 
 This function is adapted from its counterpart in Spinach (https://spindynamics.org) for MATLAB. The Spinach 
 function, repulsion.m, is Copyright Ilya Kuprov and Frederic Mentink-Vigier
@@ -34,7 +37,7 @@ function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where
             break
         end
     end
-    toangles.(R) # computing the angles
+    @. vcat(toangles(R), one(T)/npoints) # computing the angles and weights
 end
 
 """
@@ -95,16 +98,16 @@ function quat_to_euler(q::AbstractVector{T}) where T
     sy = 2*sqrt((q[3]*q[4] + q[2]*q[1])^2 + (q[2]*q[4] - q[3]*q[1])^2)
     beta = real(atan(sy, 1 - 2*q[2]^2 - 2*q[3]^2))
     if sy < 1e-10 # Singularity check: 1e-10 ≈ 0 for normalised quantities
-        alpha = 0.0
+        alpha = zero(T)
         gamma = atan(-2*(q[4]*q[1] - q[2]*q[3]), 1 - 2*(q[2]^2 - q[4]^2))
     else
         alpha = atan(2*(q[3]*q[4] - q[1]*q[2]), 2*(q[2]*q[4] + q[1]*q[3]))
         gamma = atan(2*(q[3]*q[4] + q[1]*q[2]), -2*(q[2]*q[4] - q[1]*q[3]))
         if alpha < 0
-            alpha = alpha + 2*pi
+            alpha = alpha + pi + pi # Maintaining floating point precision
         end
         if gamma < 0
-            gamma = gamma + 2*pi
+            gamma = gamma + pi + pi
         end
     end
     [alpha; beta; gamma]
