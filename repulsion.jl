@@ -22,12 +22,12 @@ function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where
     R_n = copy(R) # pre-allocate
     F = zeros(SVector{dims, T},npoints) # pre-allocate "forces"
     for i in 1:niter # starting the conjugate gradient optimization
-        F .= zero(T) .* F
+        F .= zero(T) .* F # re-initializing F at each step
         for k in eachindex(R)
-            F .-= dist_vector.(R,[R[k]]) # compute the distance between points
+            F .-= dist_vector.(R,[R[k]]) # compute the distance between points, in place (speed-up)
         end
-        R_n = normalize.(R_n - dims*F/npoints)
-        max_diff = maximum(norm.(R-R_n))
+        R_n = normalize.(R_n - dims*F/npoints) # normalize
+        max_diff = maximum(norm.(R-R_n)) # get the maximum distance
         R = R_n
 	    if mod(i, 1000) == 0
 	        @debug "Maximum difference " max_diff "At iteration " i # returns the convergence value every 1000 steps
