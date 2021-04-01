@@ -71,9 +71,9 @@ function toangles(p::SVector{N,T}) where N where T
 	    angles[2] = atan(p[2], p[1])
     elseif N == 3
 	    angles[3] = atan(p[2], p[1])
-	    angles[2] = pi/2 + atan(p[3], hypot(p[1], p[2]))
+	    angles[2] = pi/(2*one(T)) + atan(p[3], hypot(p[1], p[2]))
     elseif N == 4
-	    angles = quat_to_euler(q)
+	    angles = quat_to_euler(p)
     end
     angles
 end
@@ -96,10 +96,10 @@ function quat_to_euler(q::AbstractVector{T}) where T
     end
     
     sy = 2*sqrt((q[3]*q[4] + q[2]*q[1])^2 + (q[2]*q[4] - q[3]*q[1])^2)
-    beta = real(atan(sy, 1 - 2*q[2]^2 - 2*q[3]^2))
+    beta = real(atan(sy, one(T) - 2*q[2]^2 - 2*q[3]^2))
     if sy < 1e-10 # Singularity check: 1e-10 ≈ 0 for normalised quantities
         alpha = zero(T)
-        gamma = atan(-2*(q[4]*q[1] - q[2]*q[3]), 1 - 2*(q[2]^2 - q[4]^2))
+        gamma = atan(-2*(q[4]*q[1] - q[2]*q[3]), one(T) - 2*(q[2]^2 - q[4]^2))
     else
         alpha = atan(2*(q[3]*q[4] - q[1]*q[2]), 2*(q[2]*q[4] + q[1]*q[3]))
         gamma = atan(2*(q[3]*q[4] + q[1]*q[2]), -2*(q[2]*q[4] - q[1]*q[3]))
