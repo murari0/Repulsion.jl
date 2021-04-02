@@ -1,6 +1,8 @@
 using LinearAlgebra
 using StaticArrays
 
+include("./io.jl")
+
 """
     repulsion(npoints, dims, niter = 1e7, convergence_tol = 1e-10)
 
@@ -16,11 +18,12 @@ weight corresponding to each point (currently uniform weights are assigned)
 This function is adapted from its counterpart in Spinach (https://spindynamics.org) for MATLAB. The Spinach 
 function, repulsion.m, is Copyright Ilya Kuprov and Frederic Mentink-Vigier
 """
-function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where {T <: AbstractFloat}
+function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10, fileopts...) where {T <: AbstractFloat}
     R_raw = rand(T, dims, npoints) .- one(T)/2 # generating the first set of random points 
     R = [SVector{dims, T}(ntuple(i -> R_raw[n+i], Val(dims))) for n in 0:dims:(dims*npoints-1)]
     R_n = copy(R) # pre-allocate
     F = zeros(SVector{dims, T},npoints) # pre-allocate "forces"
+
     for i in 1:niter # starting the conjugate gradient optimization
         F .= zero(T) .* F # re-initializing F at each step
         for k in eachindex(R)
@@ -37,7 +40,13 @@ function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10) where
             break
         end
     end
-    @. vcat(toangles(R), one(T)/npoints) # computing the angles and weights
+    angles = @. vcat(toangles(R), one(T)/npoints) # computing the angles and weights
+
+    if !isempty(fileopts)
+        writedata(angles, fileopts) # Optionally, write angles to file
+    end
+
+    return angles
 end
 
 """
@@ -66,7 +75,7 @@ The interpretation of `p` and the conversion depend on the number of dimensions:
 All angles are shifted to lie in the ranges ``α ∈ [0,2π)``, ``β ∈ [0,π]``, ``γ ∈ [0,2π)``. Missing angles are returned as 0s
 """
 function toangles(p::SVector{N,T}) where N where T
-    angles = zeros(3)
+    angles = zeros(T, 3)
     if N == 2
 	    angles[2] = atan(p[2], p[1])
     elseif N == 3
