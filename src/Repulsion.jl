@@ -43,7 +43,7 @@ function repulsion(npoints, dims, niter = 1e7, convergence_tol::T = 1e-10, fileo
     angles = @. vcat(toangles(R), one(T)/npoints) # computing the angles and weights
 
     if !isempty(fileopts)
-        writedata(angles, fileopts) # Optionally, write angles to file
+        writedata(angles, fileopts...) # Optionally, write angles to file
     end
 
     return angles
