@@ -12,14 +12,14 @@ function writedata(angles, fmt::String, name::String)
             write(file, "alphas,betas,gammas,weight\n")
             writedlm(file, angles, ',')
         end
-    else if fmt == "tsv"
+    elseif fmt == "tsv"
         open(name*".dat", "w") do file
             write(file, "alphas,betas,gammas,weight\n")
             writedlm(file, angles)
         end
-    else if fmt == "mat"
+    elseif fmt == "mat"
         # To-do
-    else if fmt == "jld2"
+    elseif fmt == "jld2"
         # To-do
     end
 end
