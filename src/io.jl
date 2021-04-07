@@ -2,7 +2,7 @@ using DelimitedFiles
 using Dates
 
 writedata(angles, fmt::String) = 
-    writedata(angles, fmt, Dates.format(now(), "yyyymmddHH")) # Default filename from current time
+    writedata(angles, fmt, "grid_"*Dates.format(now(), "yyyymmddHH")) # Default filename from current time
 
 function writedata(angles, fmt::String, name::String)
     fmt = lowercase(fmt) # User defined file format specifier
@@ -14,12 +14,44 @@ function writedata(angles, fmt::String, name::String)
         end
     elseif fmt == "tsv"
         open(name*".dat", "w") do file
-            write(file, "alphas,betas,gammas,weight\n")
-            writedlm(file, angles)
+            write(file, "alphas\tbetas\tgammas\tweight\n")
+            writedlm(file, angles, '\t')
         end
     elseif fmt == "mat"
-        # To-do
-    elseif fmt == "jld2"
-        # To-do
+        alphas = [angles[i][1] for i in eachindex(angles)]
+        betas = [angles[i][2] for i in eachindex(angles)]
+        gammas = [angles[i][3] for i in eachindex(angles)]
+        weights = [angles[i][4] for i in eachindex(angles)]
+        try
+            matopen(name*".mat", "w") do file
+                write(file, "alphas", alphas)
+                write(file, "betas", betas)
+                write(file, "gammas", gammas)
+                write(file, "weights", weights)
+            end
+        catch e
+            if isa(e, UndefVarError)
+                @warn "Package MAT.jl is not loaded/installed - defaulting to TSV file"
+                writedata(angles, "tsv", name)
+            else
+                rethrow()
+            end
+        end                
+    elseif fmt == "jld" || fmt == "jld2"
+        try
+            jldopen(name*"."*fmt, "w") do file
+                write(file, "angles", angles)
+            end
+        catch e
+            if isa(e, UndefVarError)
+                @warn "Package JLD.jl/JLD2.jl is not loaded/installed - defaulting to TSV file"
+                writedata(angles, "tsv", name)
+            else
+                rethrow()
+            end
+        end
+    else
+        @warn "Unrecognised file format specifier - defaulting to TSV file" fmt
+        writedata(angles, "tsv", name)
     end
 end
