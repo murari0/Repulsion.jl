@@ -29,9 +29,9 @@ The resulting grid is written to a file specified by the optional `fileopts` arg
 
 If an unsupported file format is specified, or if the file format requires an external package that has not already been loaded by the user, the data is written to TSV as a fallback
 
-To follow the number of iterations carried out, debugging should be enbaled with by setting
+To follow the number of iterations carried out, debugging should be enabled by setting
 
-   `ENV["JULIA_DEBUG"] = Main`
+    ENV["JULIA_DEBUG"] = Main
 
 at the REPL level.
 
