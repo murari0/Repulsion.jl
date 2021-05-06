@@ -31,7 +31,7 @@ If an unsupported file format is specified, or if the file format requires an ex
 
 To follow the number of iterations carried out, debugging should be enbaled with by setting
 
-   ENV["JULIA_DEBUG"] = Main
+   `ENV["JULIA_DEBUG"] = Main`
 
 at the REPL level.
 
