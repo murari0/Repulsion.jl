@@ -4,7 +4,7 @@ using StaticArrays
 include("./io.jl")
 
 """
-    repulsion(npoints, dims, niter = 1e7, convergence_tol = 1e-10)
+    repulsion(npoints, dims, niter = 1e7, convergence_tol = 1e-10, fileopts...)
 
 Generates a uniform grid of `npoints` points in `dims` dimensions, distributed uniformly on the surface of the unit sphere
 using the REPULSION algorithm
@@ -14,6 +14,13 @@ The function iterates, up to a maximum of `niter` times, until the algorithm con
 inherit their floating point precision from `convergence_tol`.
 The points are returned as a vector of vectors of length `npoints`, with each element containing the angles `[α, β, γ]` and the
 weight corresponding to each point (currently uniform weights are assigned)
+
+The function optionally writes the resulting grid of points to a file  by calling `writedata()`, which uses the contents of the optional 
+`fileopts` parameters to determine the file format and filename. The first fileopt parameter is a String containing the file format,
+and the second is a String containing the filename. If the filename is not provided, a default is chosen using the current system time.
+The file formats currently supported are: "CSV", "TSV", "MAT", "JLD", "JLD2". The [MAT](https://github.com/JuliaIO/MAT.jl) and 
+[JLD](https://github.com/JuliaIO/JLD.jl)/[JLD2](https://github.com/JuliaIO/JLD2.jl) file types require packages not in the standard library 
+that must be installed and loaded by the user.
 
 This function is adapted from its counterpart in Spinach (https://spindynamics.org) for MATLAB. The Spinach 
 function, repulsion.m, is Copyright Ilya Kuprov and Frederic Mentink-Vigier
