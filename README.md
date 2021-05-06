@@ -31,8 +31,8 @@ If an unsupported file format is specified, or if the file format requires an ex
 
 ## Example of use
 
- angles=repulsion(100,3) for 100 grid points on a 4D sphere.
- angles=repulsion(1000,2,niter=1e8) for 1000 grid points on a 3D sphere, and setting the maximum number of convergence step to 1e8
+- angles=repulsion(100,3) for 100 grid points on a 4D sphere.
+- angles=repulsion(1000,2,niter=1e8) for 1000 grid points on a 3D sphere, and setting the maximum number of convergence step to 1e8
 
 ## Citing
 If you use this code, please cite the following papers
