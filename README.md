@@ -4,7 +4,6 @@ A Julia port of the REPULSION algorithm to generate a uniform grid on a unit hyp
 ## Dependencies
 - LinearAlgebra
 - StaticArrays
-- Quaternions
 
 ## Optional Dependencies - writing data to binary files
 - [MAT.jl](https://github.com/JuliaIO/MAT.jl)
