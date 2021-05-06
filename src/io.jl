@@ -1,9 +1,25 @@
 using DelimitedFiles
 using Dates
 
+"""
+    writedata(angles, fmt::String)
+
+Writes data to file when only the file format is specified, using a default filename created from the current time in
+yyyymmddHH format
+"""
 writedata(angles, fmt::String) = 
     writedata(angles, fmt, "grid_"*Dates.format(now(), "yyyymmddHH")) # Default filename from current time
 
+"""
+    writedata(angles, fmt::String, name::String)
+
+Writes data to file using the file format specifier and filename provided.
+
+The file format specifier is case-insensitive, and falls back to TSV if an unrecognised file format is requested. CSV and TSV
+files are written using [`writedlm`](@ref) from the standard library package `DelimitedFiles`. If the MAT or JLD/JLD2 file formats
+are requested, the function attempts to use the `matopen` or `jldopen` functions provided by the MAT or JLD/JLD2 packages. If the
+required package has not been loaded by the user, the user is notified and the function falls back to TSV.
+"""
 function writedata(angles, fmt::String, name::String)
     fmt = lowercase(fmt) # User defined file format specifier
     
