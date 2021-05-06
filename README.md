@@ -29,6 +29,11 @@ The resulting grid is written to a file specified by the optional `fileopts` arg
 
 If an unsupported file format is specified, or if the file format requires an external package that has not already been loaded by the user, the data is written to TSV as a fallback
 
+## Example of use
+
+angles=repulsion(100,3) for 100 grid points on a 4D sphere.
+angles=repulsion(1000,2,niter=1e8) for 1000 grid points on a 3D sphere, and setting the maximum number of convergence step to 1e8
+
 ## Citing
 If you use this code, please cite the following papers
 - H. J. Hogben, M. Krzystyniak, G. T. P. Charnock, P. J. Hore and I. Kuprov, *Spinach – A software library for simulation of spin dynamics in large spin systems*, J. Magn. Reson., 208 (**2011**) 179–194.
